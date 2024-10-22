@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "382977062523",
+    "project_id": "flutterlivechat-1064e",
+    "storage_bucket": "flutterlivechat-1064e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382977062523:android:cce13fbce382eb281954de",
+        "android_client_info": {
+          "package_name": "com.bfc.flutter_livechat_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCppJY63xHNRzr29iytWslrkA688Oc5ehs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
