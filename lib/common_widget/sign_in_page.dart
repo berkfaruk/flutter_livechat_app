@@ -15,6 +15,13 @@ class SignInPage extends StatelessWidget {
     print("Oturum açan User ID : " + _user.userID.toString());
   }
 
+  void _googleLogin(BuildContext context) async{
+    final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    UserModel? _user = await _userViewModel.signInWithGoogle();
+    if(_user != null) print("Oturum açan User ID : " + _user.userID.toString());
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,7 +53,7 @@ class SignInPage extends StatelessWidget {
             SocialLogInButton(
               textColor: Colors.black,
               buttonText: 'Google ile Oturum Aç',
-              onPressed: () {},
+              onPressed: () => _googleLogin(context),
               buttonIcon: Image.asset('images/google-logo.png'),
             ),
             SocialLogInButton(

@@ -22,7 +22,7 @@ class UserRepository implements AuthBase {
   }
 
   @override
-  Future<UserModel> signInAnonymously() async {
+  Future<UserModel?> signInAnonymously() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signInAnonymously();
     } else {
@@ -36,6 +36,15 @@ class UserRepository implements AuthBase {
       return await _fakeAuthService.signOut();
     } else {
       return await _firebaseAuthService.signOut();
+    }
+  }
+  
+  @override
+  Future<UserModel> signInWithGoogle() async{
+    if (appMode == AppMode.DEBUG) {
+      return await _fakeAuthService.signInWithGoogle();
+    } else {
+      return await _firebaseAuthService.signInWithGoogle();
     }
   }
 }

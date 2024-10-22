@@ -23,14 +23,14 @@ class UserViewModel with ChangeNotifier implements AuthBase {
   }
 
   @override
-  Future<UserModel> currentUser() async {
+  Future<UserModel?> currentUser() async {
     try {
       state = ViewState.Busy;
       _user = await _userRepository.currentUser();
       return _user!;
     } catch (e) {
       debugPrint('ViewModel CurrentUser : ${e.toString()}');
-      throw UnimplementedError(e.toString());
+      return null;
     } finally {
       state = ViewState.Idle;
     }
@@ -60,6 +60,20 @@ class UserViewModel with ChangeNotifier implements AuthBase {
     } catch (e) {
       debugPrint('ViewModel SignOut : ${e.toString()}');
       throw UnimplementedError(e.toString());
+    } finally {
+      state = ViewState.Idle;
+    }
+  }
+  
+  @override
+  Future<UserModel?> signInWithGoogle() async{
+    try {
+      state = ViewState.Busy;
+      _user = await _userRepository.signInWithGoogle();
+      return _user!;
+    } catch (e) {
+      debugPrint('ViewModel SignInGoogle : ${e.toString()}');
+      return null;
     } finally {
       state = ViewState.Idle;
     }
