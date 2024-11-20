@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_livechat_app/common_widget/landing_page.dart';
+import 'package:flutter_livechat_app/app/landing_page.dart';
 import 'package:flutter_livechat_app/locator.dart';
 import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -17,13 +17,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Live Chat',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(primaryColor: Colors.purple),
-      home: ChangeNotifierProvider(
-        child: LandingPage(),
-        create: (context) => UserViewModel(),
+    return ChangeNotifierProvider(
+      create: (context) => UserViewModel(),
+      child: MaterialApp(
+        title: 'Live Chat',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            primaryColor: Colors.blue, secondaryHeaderColor: Colors.white),
+        home: LandingPage(),
       ),
     );
   }

@@ -13,7 +13,7 @@ class UserRepository implements AuthBase {
   AppMode appMode = AppMode.RELEASE;
 
   @override
-  Future<UserModel> currentUser() async {
+  Future<UserModel?> currentUser() async {
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.currentUser();
     } else {
@@ -40,11 +40,38 @@ class UserRepository implements AuthBase {
   }
   
   @override
-  Future<UserModel> signInWithGoogle() async{
+  Future<UserModel?> signInWithGoogle() async{
     if (appMode == AppMode.DEBUG) {
       return await _fakeAuthService.signInWithGoogle();
     } else {
       return await _firebaseAuthService.signInWithGoogle();
+    }
+  }
+  
+  @override
+  Future<UserModel?> signInWithFacebook() async{
+    if (appMode == AppMode.DEBUG) {
+      return await _fakeAuthService.signInWithFacebook();
+    } else {
+      return await _firebaseAuthService.signInWithFacebook();
+    }
+  }
+  
+  @override
+  Future<UserModel?> createUserWithEmailAndPassword(String email, String password) async{
+    if (appMode == AppMode.DEBUG) {
+      return await _fakeAuthService.createUserWithEmailAndPassword(email, password);
+    } else {
+      return await _firebaseAuthService.createUserWithEmailAndPassword(email, password);
+    }
+  }
+  
+  @override
+  Future<UserModel?> signInWithEmailAndPassword(String email, String password) async{
+    if (appMode == AppMode.DEBUG) {
+      return await _fakeAuthService.signInWithEmailAndPassword(email, password);
+    } else {
+      return await _firebaseAuthService.signInWithEmailAndPassword(email, password);
     }
   }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_livechat_app/app/sign_in/email_password_login_register.dart';
 import 'package:flutter_livechat_app/common_widget/social_log_in_button.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
 import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
@@ -9,17 +10,33 @@ import 'package:provider/provider.dart';
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
 
-  void _guestLogin(BuildContext context) async{
+  void _guestLogin(BuildContext context) async {
     final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
     UserModel _user = await _userViewModel.signInAnonymously();
     print("Oturum açan User ID : " + _user.userID.toString());
   }
 
-  void _googleLogin(BuildContext context) async{
+  void _googleLogin(BuildContext context) async {
     final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
     UserModel? _user = await _userViewModel.signInWithGoogle();
-    if(_user != null) print("Oturum açan User ID : " + _user.userID.toString());
-    
+    if (_user != null)
+      print("Oturum açan User ID : " + _user.userID.toString());
+  }
+
+  void _facebookLogin(BuildContext context) async {
+    final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
+    UserModel? _user = await _userViewModel.signInWithFacebook();
+    if (_user != null)
+      print("Oturum açan User ID : " + _user.userID.toString());
+  }
+
+  void _emailPasswordLogin(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => EmailPasswordLoginPage(),
+      ),
+    );
   }
 
   @override
@@ -29,6 +46,7 @@ class SignInPage extends StatelessWidget {
         title: const Text('Live Chat'),
         elevation: 0,
         backgroundColor: Theme.of(context).primaryColor,
+        foregroundColor: Theme.of(context).secondaryHeaderColor,
       ),
       backgroundColor: Colors.grey.shade200,
       body: Container(
@@ -47,7 +65,7 @@ class SignInPage extends StatelessWidget {
             SocialLogInButton(
               textColor: Colors.black,
               buttonText: 'Email ile Oturum Aç',
-              onPressed: () {},
+              onPressed: () => _emailPasswordLogin(context),
               buttonIcon: Icon(Icons.email, color: Colors.black),
             ),
             SocialLogInButton(
@@ -61,18 +79,16 @@ class SignInPage extends StatelessWidget {
               textColor: Colors.white,
               buttonText: 'Facebook ile Oturum Aç',
               buttonIcon: Image.asset('images/facebook-logo.png'),
-              onPressed: () {},
+              onPressed: () => _facebookLogin(context),
             ),
             SocialLogInButton(
               buttonText: 'Misafir Girişi',
               buttonIcon: Icon(Icons.supervised_user_circle),
-              onPressed: ()=> _guestLogin(context),
+              onPressed: () => _guestLogin(context),
             ),
           ],
         ),
       ),
     );
   }
-
-  
 }

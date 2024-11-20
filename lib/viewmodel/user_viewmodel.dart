@@ -11,6 +11,8 @@ class UserViewModel with ChangeNotifier implements AuthBase {
   UserRepository _userRepository = locator<UserRepository>();
   UserModel? _user;
   UserModel? get user => _user;
+  String? emailErrorMessage;
+  String? passwordErrorMessage;
 
   ViewState get state => _state;
   set state(ViewState value) {
@@ -78,4 +80,65 @@ class UserViewModel with ChangeNotifier implements AuthBase {
       state = ViewState.Idle;
     }
   }
+  
+  @override
+  Future<UserModel?> signInWithFacebook() async{
+    try {
+      state = ViewState.Busy;
+      _user = await _userRepository.signInWithFacebook();
+      return _user!;
+    } catch (e) {
+      debugPrint('ViewModel SignInFacebook : ${e.toString()}');
+      return null;
+    } finally {
+      state = ViewState.Idle;
+    }
+  }
+  
+  @override
+  Future<UserModel?> createUserWithEmailAndPassword(String email, String password) async{
+    try {
+      if(_emailPasswordControl(email, password)){
+        state = ViewState.Busy;
+      _user = await _userRepository.createUserWithEmailAndPassword(email, password);
+      return _user!;
+      } else return null;
+    } catch (e) {
+      debugPrint('ViewModel createUserWirhEmailAndPassword : ${e.toString()}');
+      return null;
+    } finally {
+      state = ViewState.Idle;
+    }
+  }
+  
+  @override
+  Future<UserModel?> signInWithEmailAndPassword(String email, String password) async{
+    try {
+      if(_emailPasswordControl(email, password)){
+        state = ViewState.Busy;
+      _user = await _userRepository.signInWithEmailAndPassword(email, password);
+      return _user!;
+      } else return null;
+    } catch (e) {
+      debugPrint('ViewModel signInWithEmailAndPassword : ${e.toString()}');
+      return null;
+    } finally {
+      state = ViewState.Idle;
+    }
+  }
+
+  bool _emailPasswordControl(String email, String password) {
+    var result = true;
+
+    if(password.length < 6) {
+      passwordErrorMessage = 'Password must be 6 characters';
+      result = false;
+    } else passwordErrorMessage = null;
+    if(!email.contains('@')){
+      emailErrorMessage = 'Invalid Email Address';
+      result = false;
+    } else emailErrorMessage = null;
+    return result;
+  }
+
 }

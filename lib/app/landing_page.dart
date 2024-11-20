@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_livechat_app/common_widget/home_page.dart';
-import 'package:flutter_livechat_app/common_widget/sign_in_page.dart';
+import 'package:flutter_livechat_app/app/home_page.dart';
+import 'package:flutter_livechat_app/app/sign_in/sign_in_page.dart';
 import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
 import 'package:provider/provider.dart';
 
