@@ -10,12 +10,6 @@ import 'package:provider/provider.dart';
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
 
-  void _guestLogin(BuildContext context) async {
-    final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
-    UserModel _user = await _userViewModel.signInAnonymously();
-    print("Oturum açan User ID : " + _user.userID.toString());
-  }
-
   void _googleLogin(BuildContext context) async {
     final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
     UserModel? _user = await _userViewModel.signInWithGoogle();
@@ -80,11 +74,6 @@ class SignInPage extends StatelessWidget {
               buttonText: 'Facebook ile Oturum Aç',
               buttonIcon: Image.asset('images/facebook-logo.png'),
               onPressed: () => _facebookLogin(context),
-            ),
-            SocialLogInButton(
-              buttonText: 'Misafir Girişi',
-              buttonIcon: Icon(Icons.supervised_user_circle),
-              onPressed: () => _guestLogin(context),
             ),
           ],
         ),

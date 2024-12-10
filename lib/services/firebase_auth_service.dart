@@ -18,8 +18,13 @@ class FirebaseAuthService implements AuthBase {
     }
   }
 
-  UserModel _userFromFirebase(User user) {
-    return UserModel(userID: user.uid);
+  UserModel? _userFromFirebase(User? user) {
+    if(user == null) {
+      return null;
+    } else {
+      return UserModel(userID: user.uid, email: user.email!);
+    }
+    
   }
 
   @override
@@ -71,51 +76,51 @@ class FirebaseAuthService implements AuthBase {
       return null;
     }
   }
-  
-  @override
-  Future<UserModel?> signInWithFacebook() async{
-    final _facebookLogin = FacebookLogin();
-    FacebookLoginResult _facebookResult = await _facebookLogin.logIn(permissions: [FacebookPermission.publicProfile,FacebookPermission.email]);
 
-    switch(_facebookResult.status){
+  @override
+  Future<UserModel?> signInWithFacebook() async {
+    final _facebookLogin = FacebookLogin();
+    FacebookLoginResult _facebookResult = await _facebookLogin.logIn(
+        permissions: [
+          FacebookPermission.publicProfile,
+          FacebookPermission.email
+        ]);
+
+    switch (_facebookResult.status) {
       case FacebookLoginStatus.success:
-      if(_facebookResult.accessToken != null){
-        UserCredential _firebaseResult = await _firebaseAuth.signInWithCredential(FacebookAuthProvider.credential(_facebookResult.accessToken!.token));
-        User _user = _firebaseResult.user!;
-        return _userFromFirebase(_user);
-      }
-      break;
+        if (_facebookResult.accessToken != null) {
+          UserCredential _firebaseResult = await _firebaseAuth
+              .signInWithCredential(FacebookAuthProvider.credential(
+                  _facebookResult.accessToken!.token));
+          User _user = _firebaseResult.user!;
+          return _userFromFirebase(_user);
+        }
+        break;
 
       case FacebookLoginStatus.cancel:
-      print("Facebook Login Canceled by User");
-      break;
+        print("Facebook Login Canceled by User");
+        break;
 
       case FacebookLoginStatus.error:
-      print("Error : ${_facebookResult.error}");
-      break;
+        print("Error : ${_facebookResult.error}");
+        break;
     }
     return null;
   }
-  
+
   @override
-  Future<UserModel?> createUserWithEmailAndPassword(String email, String password) async{
-    try {
-      UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-      return _userFromFirebase(result.user!);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+  Future<UserModel?> createUserWithEmailAndPassword(
+      String email, String password) async {
+    UserCredential result = await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+    return _userFromFirebase(result.user!);
   }
-  
+
   @override
-  Future<UserModel?> signInWithEmailAndPassword(String email, String password) async{
-    try {
-      UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      return _userFromFirebase(result.user!);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+  Future<UserModel?> signInWithEmailAndPassword(
+      String email, String password) async {
+    UserCredential result = await _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+    return _userFromFirebase(result.user!);
   }
 }

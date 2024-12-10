@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/locator.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
@@ -20,7 +22,7 @@ class UserViewModel with ChangeNotifier implements AuthBase {
     notifyListeners();
   }
 
-  UserViewModel(){
+  UserViewModel() {
     currentUser();
   }
 
@@ -66,9 +68,9 @@ class UserViewModel with ChangeNotifier implements AuthBase {
       state = ViewState.Idle;
     }
   }
-  
+
   @override
-  Future<UserModel?> signInWithGoogle() async{
+  Future<UserModel?> signInWithGoogle() async {
     try {
       state = ViewState.Busy;
       _user = await _userRepository.signInWithGoogle();
@@ -80,9 +82,9 @@ class UserViewModel with ChangeNotifier implements AuthBase {
       state = ViewState.Idle;
     }
   }
-  
+
   @override
-  Future<UserModel?> signInWithFacebook() async{
+  Future<UserModel?> signInWithFacebook() async {
     try {
       state = ViewState.Busy;
       _user = await _userRepository.signInWithFacebook();
@@ -94,51 +96,65 @@ class UserViewModel with ChangeNotifier implements AuthBase {
       state = ViewState.Idle;
     }
   }
-  
+
   @override
-  Future<UserModel?> createUserWithEmailAndPassword(String email, String password) async{
-    try {
-      if(_emailPasswordControl(email, password)){
+  Future<UserModel?> createUserWithEmailAndPassword(
+      String email, String password) async {
+    if (_emailPasswordControl(email, password)) {
+      try {
         state = ViewState.Busy;
-      _user = await _userRepository.createUserWithEmailAndPassword(email, password);
-      return _user!;
-      } else return null;
-    } catch (e) {
-      debugPrint('ViewModel createUserWirhEmailAndPassword : ${e.toString()}');
+        _user = await _userRepository.createUserWithEmailAndPassword(
+            email, password);
+        return _user!;
+      } finally {
+        state = ViewState.Idle;
+      }
+    } else
       return null;
-    } finally {
-      state = ViewState.Idle;
-    }
   }
-  
+
   @override
-  Future<UserModel?> signInWithEmailAndPassword(String email, String password) async{
-    try {
-      if(_emailPasswordControl(email, password)){
+  Future<UserModel?> signInWithEmailAndPassword(
+      String email, String password) async {
+    if (_emailPasswordControl(email, password)) {
+      try {
         state = ViewState.Busy;
-      _user = await _userRepository.signInWithEmailAndPassword(email, password);
-      return _user!;
-      } else return null;
-    } catch (e) {
-      debugPrint('ViewModel signInWithEmailAndPassword : ${e.toString()}');
+        _user =
+            await _userRepository.signInWithEmailAndPassword(email, password);
+        return _user!;
+      } finally {
+        state = ViewState.Idle;
+      }
+    } else
       return null;
-    } finally {
-      state = ViewState.Idle;
-    }
   }
 
   bool _emailPasswordControl(String email, String password) {
     var result = true;
 
-    if(password.length < 6) {
+    if (password.length < 6) {
       passwordErrorMessage = 'Password must be 6 characters';
       result = false;
-    } else passwordErrorMessage = null;
-    if(!email.contains('@')){
+    } else
+      passwordErrorMessage = null;
+    if (!email.contains('@')) {
       emailErrorMessage = 'Invalid Email Address';
       result = false;
-    } else emailErrorMessage = null;
+    } else
+      emailErrorMessage = null;
     return result;
   }
 
+  Future<bool> updateUserName(String userID,String newUserName) async{
+    var result = await _userRepository.updateUserName(userID, newUserName);
+    if(result){
+      _user!.userName = newUserName;
+    }
+    return result;
+  }
+
+  Future<String> uploadFile(String userID, String fileType, File uploadFile) async{
+    var downloadUrl = await _userRepository.uploadFile(userID, fileType, uploadFile);
+    return downloadUrl;
+  }
 }

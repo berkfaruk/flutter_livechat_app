@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_livechat_app/app/error_exception.dart';
+import 'package:flutter_livechat_app/common_widget/platform_responsive_alert_dialog.dart';
 import 'package:flutter_livechat_app/common_widget/social_log_in_button.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
 import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
@@ -25,15 +28,33 @@ class _EmailPasswordLoginPageState extends State<EmailPasswordLoginPage> {
     final _userModel = Provider.of<UserViewModel>(context, listen: false);
 
     if (_formType == FormType.LogIn) {
-      UserModel? _loginUser =
-          await _userModel.signInWithEmailAndPassword(_email!, _password!);
-      if (_loginUser != null)
-        print("Oturum açan User ID : " + _loginUser.userID.toString());
+      try {
+        UserModel? _loginUser =
+            await _userModel.signInWithEmailAndPassword(_email!, _password!);
+        if (_loginUser != null)
+          print("Oturum açan User ID : " + _loginUser.userID.toString());
+      } on FirebaseAuthException catch (e) {
+        debugPrint(e.message.toString());
+        debugPrint(e.code.toString());
+        PlatformResponsiveAlertDialog(
+                title: 'Sign In Error',
+                content: ErrorException.showError(e.code),
+                buttonString: 'Okey')
+            .show(context);
+      }
     } else {
-      UserModel? _registerUser =
-          await _userModel.createUserWithEmailAndPassword(_email!, _password!);
-      if (_registerUser != null)
-        print("Oturum açan User ID : " + _registerUser.userID.toString());
+      try {
+        UserModel? _registerUser = await _userModel
+            .createUserWithEmailAndPassword(_email!, _password!);
+        if (_registerUser != null)
+          print("Oturum açan User ID : " + _registerUser.userID.toString());
+      } on FirebaseAuthException catch (e) {
+        PlatformResponsiveAlertDialog(
+                title: 'Sign Up Error',
+                content: ErrorException.showError(e.code),
+                buttonString: 'Okey')
+            .show(context);
+      }
     }
   }
 
@@ -74,8 +95,11 @@ class _EmailPasswordLoginPageState extends State<EmailPasswordLoginPage> {
                     children: [
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
+                        initialValue: 'bfc@bfc.com',
                         decoration: InputDecoration(
-                          errorText: _userViewModel.emailErrorMessage != null ?_userViewModel.emailErrorMessage : null,
+                          errorText: _userViewModel.emailErrorMessage != null
+                              ? _userViewModel.emailErrorMessage
+                              : null,
                           prefixIcon: Icon(Icons.mail),
                           hintText: "Email",
                           labelText: "Email",
@@ -88,8 +112,11 @@ class _EmailPasswordLoginPageState extends State<EmailPasswordLoginPage> {
                       SizedBox(height: 8),
                       TextFormField(
                         obscureText: true,
+                        initialValue: '123456',
                         decoration: InputDecoration(
-                          errorText: _userViewModel.passwordErrorMessage != null ? _userViewModel.passwordErrorMessage : null,
+                          errorText: _userViewModel.passwordErrorMessage != null
+                              ? _userViewModel.passwordErrorMessage
+                              : null,
                           prefixIcon: Icon(Icons.key),
                           hintText: "Password",
                           labelText: "Password",

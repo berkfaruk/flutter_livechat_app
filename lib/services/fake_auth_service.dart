@@ -4,17 +4,18 @@ import 'package:flutter_livechat_app/services/auth_base.dart';
 class FakeAuthService implements AuthBase {
   
   String userID = "1234test1234";
+  String email = 'test@gmail.com';
 
   @override
   Future<UserModel> currentUser() async{
-    return await Future.value(UserModel(userID: userID));
+    return await Future.value(UserModel(userID: userID, email: email));
   }
 
   
 
   @override
   Future<UserModel> signInAnonymously() async{
-    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: userID));
+    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: userID, email: email));
   }
 
   @override
@@ -24,21 +25,21 @@ class FakeAuthService implements AuthBase {
   
   @override
   Future<UserModel?> signInWithGoogle() async{
-    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: 'google_user_id_12341234'));
+    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: 'google_user_id_12341234', email: email));
   }
   
   @override
   Future<UserModel?> signInWithFacebook() async{
-    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: 'facebook_user_id_12341234'));
+    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: 'facebook_user_id_12341234', email: email));
   }
   
   @override
   Future<UserModel?> createUserWithEmailAndPassword(String email, String password) async{
-    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: 'created_user_id_12341234'));
+    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: 'created_user_id_12341234', email: email));
   }
   
   @override
   Future<UserModel?> signInWithEmailAndPassword(String email, String password) async{
-    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: 'signIn_user_id_12341234'));
+    return await Future.delayed(Duration(seconds: 2), ()=>UserModel(userID: 'signIn_user_id_12341234', email: email));
   }
 }
