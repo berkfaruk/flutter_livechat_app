@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/locator.dart';
+import 'package:flutter_livechat_app/model/message.dart';
+import 'package:flutter_livechat_app/model/speech.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
 import 'package:flutter_livechat_app/repository/user_repository.dart';
 import 'package:flutter_livechat_app/services/auth_base.dart';
@@ -156,5 +158,22 @@ class UserViewModel with ChangeNotifier implements AuthBase {
   Future<String> uploadFile(String userID, String fileType, File uploadFile) async{
     var downloadUrl = await _userRepository.uploadFile(userID, fileType, uploadFile);
     return downloadUrl;
+  }
+
+  Future<List<UserModel>> getAllUsers() async{
+    var allUsersList = await _userRepository.getAllUsers();
+    return allUsersList;
+  }
+
+  Stream<List<Message>> getMessages(String currentUserID, String conversationUserID) {
+    return _userRepository.getMessages(currentUserID, conversationUserID);
+  }
+
+  Future<bool> saveMessage(Message toSaveMessage) async{
+    return await _userRepository.saveMessage(toSaveMessage);
+  }
+
+  Future<List<Speech>> getAllConversations(String userID) async{
+    return await _userRepository.getAllConversations(userID);
   }
 }

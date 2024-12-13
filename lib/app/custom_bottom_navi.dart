@@ -17,6 +17,7 @@ class CustomBottomNavigation extends StatelessWidget {
       tabBar: CupertinoTabBar(
         items: [
           _createNavItem(TabItem.AllUsers),
+          _createNavItem(TabItem.Chats),
           _createNavItem(TabItem.Profile),
         ],
         onTap: (index) => onSelectedTab(TabItem.values[index]),

@@ -186,6 +186,15 @@ class _ProfilePageState extends State<ProfilePage> {
     if(_profilePhoto != null) {
       var url = await _userViewModel.uploadFile(_userViewModel.user!.userID, 'profile_photo', _profilePhoto!);
       print('Profile Photo URL : $url');
+
+      if(url.isNotEmpty) {
+        PlatformResponsiveAlertDialog(
+                title: 'Succes',
+                content:
+                    'Profile Photo Updated',
+                buttonString: 'Okey')
+            .show(context);
+      }
     }
   }
 }

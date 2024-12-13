@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter_livechat_app/locator.dart';
+import 'package:flutter_livechat_app/model/message.dart';
+import 'package:flutter_livechat_app/model/speech.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
 import 'package:flutter_livechat_app/services/auth_base.dart';
 import 'package:flutter_livechat_app/services/fake_auth_service.dart';
 import 'package:flutter_livechat_app/services/firebase_auth_service.dart';
 import 'package:flutter_livechat_app/services/firebase_storage_service.dart';
 import 'package:flutter_livechat_app/services/firestore_db_service.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 enum AppMode { DEBUG, RELEASE }
 
@@ -17,6 +20,8 @@ class UserRepository implements AuthBase {
   FirebaseStorageService _firebaseStorageService = locator<FirebaseStorageService>();
 
   AppMode appMode = AppMode.RELEASE;
+
+  List<UserModel> allUsersList = [];
 
   @override
   Future<UserModel?> currentUser() async {
@@ -103,7 +108,7 @@ class UserRepository implements AuthBase {
     }
   }
 
-  Future<bool> updateUserName(String userID, String newUserName) async{
+  Future<bool> updateUserName(String userID, String newUserName) async {
     if (appMode == AppMode.DEBUG) {
       return false;
     } else {
@@ -111,13 +116,81 @@ class UserRepository implements AuthBase {
     }
   }
 
-  Future<String> uploadFile(String userID, String fileType, File uploadFile) async{
+  Future<String> uploadFile(
+      String userID, String fileType, File uploadFile) async {
     if (appMode == AppMode.DEBUG) {
       return "download_url_link";
     } else {
-      var profilePhotoURL = await _firebaseStorageService.uploadFile(userID, fileType, uploadFile);
+      var profilePhotoURL = await _firebaseStorageService.uploadFile(
+          userID, fileType, uploadFile);
       await _firestoreDBService.updateProfilePhoto(userID, profilePhotoURL);
       return profilePhotoURL;
     }
+  }
+
+  Future<List<UserModel>> getAllUsers() async {
+    if (appMode == AppMode.DEBUG) {
+      return [];
+    } else {
+      allUsersList = await _firestoreDBService.getAllUsers();
+      return allUsersList;
+    }
+  }
+
+  Stream<List<Message>> getMessages(
+      String currentUserID, String conversationUserID) {
+    if (appMode == AppMode.DEBUG) {
+      return Stream.empty();
+    } else {
+      return _firestoreDBService.getMessages(currentUserID, conversationUserID);
+    }
+  }
+
+  Future<bool> saveMessage(Message toSaveMessage) async {
+    if (appMode == AppMode.DEBUG) {
+      return true;
+    } else {
+      return _firestoreDBService.saveMessage(toSaveMessage);
+    }
+  }
+
+  Future<List<Speech>> getAllConversations(String userID) async {
+    if (appMode == AppMode.DEBUG) {
+      return [];
+    } else {
+      DateTime _time = await _firestoreDBService.showTime(userID);
+
+      var speechList = await _firestoreDBService.getAllConversations(userID);
+      for (var currentSpeech in speechList) {
+        var userInUserList = findUserInList(currentSpeech.listener!);
+        if (userInUserList != null) {
+          currentSpeech.listenerUserName = userInUserList.userName;
+          currentSpeech.listenerUserProfileURL = userInUserList.profileURL;
+        } else {
+          var _userReadFromDatabase =
+              await _firestoreDBService.readUser(currentSpeech.listener!);
+          currentSpeech.listenerUserName = _userReadFromDatabase.userName;
+          currentSpeech.listenerUserProfileURL = _userReadFromDatabase.profileURL;
+        }
+        calculateTimeAgo(currentSpeech, _time);
+      }
+      return speechList;
+    }
+  }
+
+  UserModel? findUserInList(String userID) {
+    for (int i = 0; i < allUsersList.length; i++) {
+      if (allUsersList[i].userID == userID) {
+        return allUsersList[i];
+      }
+    }
+    return null;
+  }
+  
+  void calculateTimeAgo(Speech currentSpeech, DateTime time) {
+    currentSpeech.lastReadTime = time;
+
+        var _duration = time.difference(currentSpeech.creationDate!.toDate());
+        currentSpeech.timeDifference = timeago.format(time.subtract(_duration));
   }
 }

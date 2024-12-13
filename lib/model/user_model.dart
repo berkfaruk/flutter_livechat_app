@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel {
 
   final String userID;
-  String email;
+  String? email;
   String? userName;
   String? profileURL;
   DateTime? createdAt;
@@ -19,7 +19,7 @@ class UserModel {
     return {
       'userID' : userID,
       'email' : email,
-      'userName' : userName ?? email.substring(0, email.indexOf('@')) + randomNumberGenerate(),
+      'userName' : userName ?? email!.substring(0, email!.indexOf('@')) + randomNumberGenerate(),
       'profileURL' : profileURL ?? 'https://i.pinimg.com/736x/cb/45/72/cb4572f19ab7505d552206ed5dfb3739.jpg',
       'createdAt' : createdAt ?? FieldValue.serverTimestamp(),
       'updatedAt' : updatedAt ?? FieldValue.serverTimestamp(),
@@ -35,6 +35,8 @@ class UserModel {
     createdAt = (map['createdAt'] as Timestamp).toDate(),
     updatedAt = (map['updatedAt'] as Timestamp).toDate(),
     level = map['level'];
+
+  UserModel.idAndPhoto({required this.userID, required this.profileURL});
 
     @override
   String toString() {

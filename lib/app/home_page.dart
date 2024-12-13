@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:flutter_livechat_app/app/chats_page.dart';
 import 'package:flutter_livechat_app/app/custom_bottom_navi.dart';
 import 'package:flutter_livechat_app/app/profile.dart';
 import 'package:flutter_livechat_app/app/tab_items.dart';
@@ -20,12 +21,14 @@ class _HomePageState extends State<HomePage> {
 
   Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
     TabItem.AllUsers: GlobalKey<NavigatorState>(),
+    TabItem.Chats: GlobalKey<NavigatorState>(),
     TabItem.Profile: GlobalKey<NavigatorState>(),
   };
 
   Map<TabItem, Widget> allTabPages() {
     return {
       TabItem.AllUsers: UsersPage(),
+      TabItem.Chats: ChatsPage(),
       TabItem.Profile: ProfilePage(),
     };
   }
