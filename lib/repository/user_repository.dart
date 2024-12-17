@@ -128,15 +128,6 @@ class UserRepository implements AuthBase {
     }
   }
 
-  Future<List<UserModel>> getAllUsers() async {
-    if (appMode == AppMode.DEBUG) {
-      return [];
-    } else {
-      allUsersList = await _firestoreDBService.getAllUsers();
-      return allUsersList;
-    }
-  }
-
   Stream<List<Message>> getMessages(
       String currentUserID, String conversationUserID) {
     if (appMode == AppMode.DEBUG) {
@@ -192,5 +183,15 @@ class UserRepository implements AuthBase {
 
         var _duration = time.difference(currentSpeech.creationDate!.toDate());
         currentSpeech.timeDifference = timeago.format(time.subtract(_duration));
+  }
+
+  Future<List<UserModel>> getUserWithPagination(UserModel? lastFetchedUser, int getNumberOfUsers) async{
+    if (appMode == AppMode.DEBUG) {
+      return [];
+    } else {
+      List<UserModel> _userList = await _firestoreDBService.getUserWithPagination(lastFetchedUser, getNumberOfUsers);
+      allUsersList.addAll(_userList);
+      return _userList;
+    }
   }
 }

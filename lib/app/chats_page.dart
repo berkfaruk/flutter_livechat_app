@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/app/chat_page.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
@@ -16,7 +15,6 @@ class _ChatsPageState extends State<ChatsPage> {
   @override
   Widget build(BuildContext context) {
     UserViewModel _userViewModel = Provider.of<UserViewModel>(context);
-    _getConversations();
     return Scaffold(
       appBar: AppBar(
         title: Text('Chats'),
@@ -52,9 +50,19 @@ class _ChatsPageState extends State<ChatsPage> {
                       },
                       child: ListTile(
                         title: Text(currentSpeech.listenerUserName!),
-                        subtitle: Text(currentSpeech.lastSentMessage! +
-                            "   " +
-                            currentSpeech.timeDifference!),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                currentSpeech.lastSentMessage!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Text(currentSpeech.timeDifference!),
+                          ],
+                        ),
                         leading: CircleAvatar(
                           backgroundImage: NetworkImage(
                               currentSpeech.listenerUserProfileURL!),
@@ -97,19 +105,6 @@ class _ChatsPageState extends State<ChatsPage> {
         },
       ),
     );
-  }
-
-  void _getConversations() async {
-    final _userViewModel = Provider.of<UserViewModel>(context);
-    var conversations = await FirebaseFirestore.instance
-        .collection('conversations')
-        .where('speaker', isEqualTo: _userViewModel.user!.userID)
-        .orderBy('creation_date', descending: true)
-        .get();
-
-    for (var chat in conversations.docs) {
-      print('chat: ${chat.data().toString()}');
-    }
   }
 
   Future<Null> _refreshSpeechList() async {

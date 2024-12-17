@@ -44,7 +44,6 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     UserViewModel _userViewModel = Provider.of<UserViewModel>(context);
     _controllerUserName.text = _userViewModel.user!.userName!;
-    print("Profil Page User Info : " + _userViewModel.user.toString());
     return Scaffold(
         appBar: AppBar(
           title: Text('Profile'),

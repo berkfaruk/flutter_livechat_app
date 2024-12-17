@@ -7,6 +7,8 @@ import 'package:flutter_livechat_app/app/profile.dart';
 import 'package:flutter_livechat_app/app/tab_items.dart';
 import 'package:flutter_livechat_app/app/users.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
+import 'package:flutter_livechat_app/viewmodel/all_users_viewmodel.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   final UserModel user;
@@ -27,7 +29,10 @@ class _HomePageState extends State<HomePage> {
 
   Map<TabItem, Widget> allTabPages() {
     return {
-      TabItem.AllUsers: UsersPage(),
+      TabItem.AllUsers: ChangeNotifierProvider(
+        create: (context) => AllUsersViewModel(),
+        child: UsersPage(),
+      ),
       TabItem.Chats: ChatsPage(),
       TabItem.Profile: ProfilePage(),
     };
@@ -50,20 +55,8 @@ class _HomePageState extends State<HomePage> {
               _currentTab = selectedTab;
             });
           }
-
-          print("Choose Tab Item : ${selectedTab.toString()}");
         },
       ),
     );
   }
 }
-/*
-Future<bool> _logOut(BuildContext context) async {
-    final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
-    bool result = await _userViewModel.signOut();
-    return result;
-  }*/
-
-  /*
-  onPopInvoked: (didPop) async => !await navigatorKeys[_currentTab]!.currentState!.maybePop(),
-  */

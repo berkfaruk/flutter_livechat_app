@@ -160,11 +160,6 @@ class UserViewModel with ChangeNotifier implements AuthBase {
     return downloadUrl;
   }
 
-  Future<List<UserModel>> getAllUsers() async{
-    var allUsersList = await _userRepository.getAllUsers();
-    return allUsersList;
-  }
-
   Stream<List<Message>> getMessages(String currentUserID, String conversationUserID) {
     return _userRepository.getMessages(currentUserID, conversationUserID);
   }
@@ -175,5 +170,9 @@ class UserViewModel with ChangeNotifier implements AuthBase {
 
   Future<List<Speech>> getAllConversations(String userID) async{
     return await _userRepository.getAllConversations(userID);
+  }
+
+  Future<List<UserModel>> getUserWithPagination(UserModel? lastFetchedUser, int getNumberOfUsers) async{
+    return await _userRepository.getUserWithPagination(lastFetchedUser, getNumberOfUsers);
   }
 }
