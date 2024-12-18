@@ -7,7 +7,7 @@ import 'package:flutter_livechat_app/app/profile.dart';
 import 'package:flutter_livechat_app/app/tab_items.dart';
 import 'package:flutter_livechat_app/app/users.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
-import 'package:flutter_livechat_app/viewmodel/all_users_viewmodel.dart';
+import 'package:flutter_livechat_app/viewmodel/all_users_view_model.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {

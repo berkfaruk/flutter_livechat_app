@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/app/chat_page.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
-import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
+import 'package:flutter_livechat_app/viewmodel/chat_view_model.dart';
+import 'package:flutter_livechat_app/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class ChatsPage extends StatefulWidget {
@@ -39,12 +40,15 @@ class _ChatsPageState extends State<ChatsPage> {
                       onTap: () {
                         Navigator.of(context, rootNavigator: true)
                             .push(MaterialPageRoute(
-                          builder: (context) => ChatPage(
-                            currentUser: _userViewModel.user!,
-                            conversationUser: UserModel.idAndPhoto(
-                                userID: currentSpeech.listener!,
-                                profileURL:
-                                    currentSpeech.listenerUserProfileURL),
+                          builder: (context) =>
+                              ChangeNotifierProvider<ChatViewModel>(
+                            create: (context) => ChatViewModel(
+                                currentUser: _userViewModel.user!,
+                                conversationUser: UserModel.idAndPhoto(
+                                    userID: currentSpeech.listener!,
+                                    profileURL:
+                                        currentSpeech.listenerUserProfileURL)),
+                            child: ChatPage(),
                           ),
                         ));
                       },

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/common_widget/platform_responsive_alert_dialog.dart';
-import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
+import 'package:flutter_livechat_app/viewmodel/user_view_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 

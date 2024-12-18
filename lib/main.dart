@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/app/landing_page.dart';
 import 'package:flutter_livechat_app/locator.dart';
-import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
+import 'package:flutter_livechat_app/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

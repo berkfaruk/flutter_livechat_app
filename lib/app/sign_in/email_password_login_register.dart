@@ -4,7 +4,7 @@ import 'package:flutter_livechat_app/app/error_exception.dart';
 import 'package:flutter_livechat_app/common_widget/platform_responsive_alert_dialog.dart';
 import 'package:flutter_livechat_app/common_widget/social_log_in_button.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
-import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
+import 'package:flutter_livechat_app/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 enum FormType { Register, LogIn }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/app/chat_page.dart';
-import 'package:flutter_livechat_app/viewmodel/all_users_viewmodel.dart';
-import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
+import 'package:flutter_livechat_app/viewmodel/all_users_view_model.dart';
+import 'package:flutter_livechat_app/viewmodel/chat_view_model.dart';
+import 'package:flutter_livechat_app/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class UsersPage extends StatefulWidget {
@@ -101,11 +102,14 @@ class _UsersPageState extends State<UsersPage> {
     }
     return GestureDetector(
       onTap: () {
-        Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
-          builder: (context) => ChatPage(
-              currentUser: _userViewModel.user!,
-              conversationUser: _currentUser),
-        ));
+        Navigator.of(context, rootNavigator: true).push(
+          MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider<ChatViewModel>(
+              create: (context) => ChatViewModel(currentUser: _userViewModel.user!, conversationUser: _currentUser),
+              child: ChatPage(),
+            ),
+          ),
+        );
       },
       child: Card(
         child: ListTile(

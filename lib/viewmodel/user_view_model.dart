@@ -164,10 +164,6 @@ class UserViewModel with ChangeNotifier implements AuthBase {
     return _userRepository.getMessages(currentUserID, conversationUserID);
   }
 
-  Future<bool> saveMessage(Message toSaveMessage) async{
-    return await _userRepository.saveMessage(toSaveMessage);
-  }
-
   Future<List<Speech>> getAllConversations(String userID) async{
     return await _userRepository.getAllConversations(userID);
   }

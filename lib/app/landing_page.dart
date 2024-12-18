@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/app/home_page.dart';
 import 'package:flutter_livechat_app/app/sign_in/sign_in_page.dart';
-import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
+import 'package:flutter_livechat_app/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class LandingPage extends StatelessWidget {

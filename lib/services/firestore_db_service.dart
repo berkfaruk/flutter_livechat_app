@@ -16,7 +16,7 @@ class FirestoreDBService implements DBBase {
     Map<String, dynamic> _readUserInfoMap =
         _readUser.data() as Map<String, dynamic>;
     UserModel _readUserInfo = UserModel.fromMap(_readUserInfoMap);
-    print('Okunan User Bilgileri: ${_readUserInfo.toString()}');
+    print('Read User Info: ${_readUserInfo.toString()}');
 
     return true;
   }
@@ -29,7 +29,6 @@ class FirestoreDBService implements DBBase {
         _readUser.data() as Map<String, dynamic>;
 
     UserModel _readUserObject = UserModel.fromMap(_readUserMapInfo);
-    print('Okunan User Nesnesi' + _readUserObject.toString());
     return _readUserObject;
   }
 
@@ -67,6 +66,7 @@ class FirestoreDBService implements DBBase {
         .doc("$currentUserID--$conversationUserID")
         .collection('messages')
         .orderBy('date', descending: true)
+        .limit(1)
         .snapshots();
     return snapshot.map((messageList) => messageList.docs
         .map(
@@ -184,5 +184,38 @@ class FirestoreDBService implements DBBase {
     }
 
     return _allUsers;
+  }
+
+  Future<List<Message>> getMessageWithPagination(String currentUserID, String conversationUserID, Message? lastFetchedMessage, int getNumberOfMessage) async{
+
+    QuerySnapshot _querySnapshot;
+    List<Message> _allMessages = [];
+    if (lastFetchedMessage == null) {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection('conversations')
+        .doc("$currentUserID--$conversationUserID")
+        .collection('messages')
+        .orderBy('date', descending: true)
+          .limit(getNumberOfMessage)
+          .get();
+      
+    } else {
+      _querySnapshot = await FirebaseFirestore.instance
+          .collection('conversations')
+        .doc("$currentUserID--$conversationUserID")
+        .collection('messages')
+        .orderBy('date', descending: true)
+          .startAfter([lastFetchedMessage.date])
+          .limit(getNumberOfMessage)
+          .get();
+    }
+    for (DocumentSnapshot snap in _querySnapshot.docs) {
+      Message _oneUser =
+          Message.fromMap(snap.data() as Map<String, dynamic>);
+      _allMessages.add(_oneUser);
+    }
+
+    return _allMessages;
+
   }
 }

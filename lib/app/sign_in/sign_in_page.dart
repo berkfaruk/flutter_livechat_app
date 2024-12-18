@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_livechat_app/app/sign_in/email_password_login_register.dart';
 import 'package:flutter_livechat_app/common_widget/social_log_in_button.dart';
 import 'package:flutter_livechat_app/model/user_model.dart';
-import 'package:flutter_livechat_app/viewmodel/user_viewmodel.dart';
+import 'package:flutter_livechat_app/viewmodel/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class SignInPage extends StatelessWidget {
