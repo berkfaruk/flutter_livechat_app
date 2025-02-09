@@ -30,10 +30,10 @@ class _ProfilePageState extends State<ProfilePage> {
     super.dispose();
   }
 
-  void _addProfilePhoto(ImageSource source) async{
+  void _addProfilePhoto(ImageSource source) async {
     XFile? _pickedPhoto = await _picker.pickImage(source: source);
     setState(() {
-      if(_pickedPhoto != null){
+      if (_pickedPhoto != null) {
         _profilePhoto = File(_pickedPhoto.path);
       }
       Navigator.of(context).pop();
@@ -50,13 +50,12 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: Theme.of(context).primaryColor,
           foregroundColor: Theme.of(context).secondaryHeaderColor,
           actions: [
-            ElevatedButton(
-              onPressed: () => _logOutRequest(context),
-              child: Text(
-                'Log Out',
-                style: TextStyle(color: Colors.blue, fontSize: 18),
-              ),
-            ),
+            IconButton(
+                onPressed: () => _logOutRequest(context),
+                icon: const Icon(
+                  Icons.exit_to_app,
+                  size: 35,
+                )),
           ],
         ),
         body: SingleChildScrollView(
@@ -95,7 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       );
                     },
                     child: CircleAvatar(
-                      radius: 75,
+                      radius: 120,
                       backgroundImage: _profilePhoto == null
                           ? NetworkImage(_userViewModel.user!.profileURL!)
                           : FileImage(_profilePhoto!),
@@ -109,7 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     initialValue: _userViewModel.user!.email,
                     readOnly: true,
                     decoration: InputDecoration(
-                        labelText: 'Email', border: OutlineInputBorder()),
+                        prefixIcon: Icon(Icons.email_outlined),
+                        labelText: 'Email',
+                        border: OutlineInputBorder()),
                   ),
                 ),
                 Padding(
@@ -117,6 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: TextFormField(
                     controller: _controllerUserName,
                     decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.person_2_outlined),
                         labelText: 'Username',
                         hintText: 'Username',
                         border: OutlineInputBorder()),
@@ -177,20 +179,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 buttonString: 'Okey')
             .show(context);
       }
-    } 
+    }
   }
-  
-  void _updateProfilePhoto(BuildContext context) async{
+
+  void _updateProfilePhoto(BuildContext context) async {
     final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
-    if(_profilePhoto != null) {
-      var url = await _userViewModel.uploadFile(_userViewModel.user!.userID, 'profile_photo', _profilePhoto!);
+    if (_profilePhoto != null) {
+      var url = await _userViewModel.uploadFile(
+          _userViewModel.user!.userID, 'profile_photo', _profilePhoto!);
       print('Profile Photo URL : $url');
 
-      if(url.isNotEmpty) {
+      if (url.isNotEmpty) {
         PlatformResponsiveAlertDialog(
                 title: 'Succes',
-                content:
-                    'Profile Photo Updated',
+                content: 'Profile Photo Updated',
                 buttonString: 'Okey')
             .show(context);
       }

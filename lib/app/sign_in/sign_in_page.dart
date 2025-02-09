@@ -13,15 +13,13 @@ class SignInPage extends StatelessWidget {
   void _googleLogin(BuildContext context) async {
     final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
     UserModel? _user = await _userViewModel.signInWithGoogle();
-    if (_user != null)
-      print("Oturum açan User ID : " + _user.userID.toString());
+    if (_user != null) print("Sign In User ID : " + _user.userID.toString());
   }
 
   void _facebookLogin(BuildContext context) async {
     final _userViewModel = Provider.of<UserViewModel>(context, listen: false);
     UserModel? _user = await _userViewModel.signInWithFacebook();
-    if (_user != null)
-      print("Oturum açan User ID : " + _user.userID.toString());
+    if (_user != null) print("Sign In User ID : " + _user.userID.toString());
   }
 
   void _emailPasswordLogin(BuildContext context) {
@@ -36,42 +34,42 @@ class SignInPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Live Chat'),
-        elevation: 0,
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Theme.of(context).secondaryHeaderColor,
-      ),
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Colors.blue,
       body: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Oturum Açın',
+            const Icon(Icons.message_outlined, color: Colors.white, size: 120),
+            const Text(
+              'Live Chat',
+              style: TextStyle(
+                  fontSize: 46,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             SocialLogInButton(
-              textColor: Colors.black,
-              buttonText: 'Email ile Oturum Aç',
+              buttonColor: Colors.deepOrange.shade700,
+              textColor: Colors.white,
+              buttonText: 'Sign In with Email',
               onPressed: () => _emailPasswordLogin(context),
-              buttonIcon: Icon(Icons.email, color: Colors.black),
+              buttonIcon: const Icon(Icons.email, color: Colors.white),
             ),
             SocialLogInButton(
+              buttonColor: Colors.grey.shade300,
               textColor: Colors.black,
-              buttonText: 'Google ile Oturum Aç',
+              buttonText: 'Sign In with Google',
               onPressed: () => _googleLogin(context),
               buttonIcon: Image.asset('images/google-logo.png'),
             ),
             SocialLogInButton(
-              buttonColor: Color(0xFF334D92),
+              buttonColor: const Color(0xFF334D92),
               textColor: Colors.white,
-              buttonText: 'Facebook ile Oturum Aç',
+              buttonText: 'Sign In with Facebook',
               buttonIcon: Image.asset('images/facebook-logo.png'),
               onPressed: () => _facebookLogin(context),
             ),

@@ -32,7 +32,7 @@ class _EmailPasswordLoginPageState extends State<EmailPasswordLoginPage> {
         UserModel? _loginUser =
             await _userModel.signInWithEmailAndPassword(_email!, _password!);
         if (_loginUser != null)
-          print("Oturum açan User ID : " + _loginUser.userID.toString());
+          print("Sign In User ID : " + _loginUser.userID.toString());
       } on FirebaseAuthException catch (e) {
         debugPrint(e.message.toString());
         debugPrint(e.code.toString());
@@ -47,7 +47,7 @@ class _EmailPasswordLoginPageState extends State<EmailPasswordLoginPage> {
         UserModel? _registerUser = await _userModel
             .createUserWithEmailAndPassword(_email!, _password!);
         if (_registerUser != null)
-          print("Oturum açan User ID : " + _registerUser.userID.toString());
+          print("Sign In User ID : " + _registerUser.userID.toString());
       } on FirebaseAuthException catch (e) {
         PlatformResponsiveAlertDialog(
                 title: 'Sign Up Error',
@@ -81,64 +81,70 @@ class _EmailPasswordLoginPageState extends State<EmailPasswordLoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Giriş / Kayıt'),
+        title: Text(_buttonText!),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Theme.of(context).secondaryHeaderColor,
       ),
       body: _userViewModel.state == ViewState.Idle
-          ? SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        initialValue: 'bfc@bfc.com',
-                        decoration: InputDecoration(
-                          errorText: _userViewModel.emailErrorMessage != null
-                              ? _userViewModel.emailErrorMessage
-                              : null,
-                          prefixIcon: Icon(Icons.mail),
-                          hintText: "Email",
-                          labelText: "Email",
-                          border: OutlineInputBorder(),
+          ? Center(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        const Icon(Icons.message_outlined,
+                            color: Colors.blue, size: 120),
+                        const Text('Welcome',
+                            style: TextStyle(fontSize: 40, color: Colors.blue,fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            errorText: _userViewModel.emailErrorMessage != null
+                                ? _userViewModel.emailErrorMessage
+                                : null,
+                            prefixIcon: Icon(Icons.mail, color: Colors.blue),
+                            hintText: "Email",
+                            labelText: "Email",
+                            border: OutlineInputBorder(),
+                          ),
+                          onSaved: (userEmail) {
+                            _email = userEmail;
+                          },
                         ),
-                        onSaved: (userEmail) {
-                          _email = userEmail;
-                        },
-                      ),
-                      SizedBox(height: 8),
-                      TextFormField(
-                        obscureText: true,
-                        initialValue: '123456',
-                        decoration: InputDecoration(
-                          errorText: _userViewModel.passwordErrorMessage != null
-                              ? _userViewModel.passwordErrorMessage
-                              : null,
-                          prefixIcon: Icon(Icons.key),
-                          hintText: "Password",
-                          labelText: "Password",
-                          border: OutlineInputBorder(),
+                        const SizedBox(height: 8),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            errorText:
+                                _userViewModel.passwordErrorMessage != null
+                                    ? _userViewModel.passwordErrorMessage
+                                    : null,
+                            prefixIcon: Icon(Icons.key, color: Colors.blue),
+                            hintText: "Password",
+                            labelText: "Password",
+                            border: OutlineInputBorder(),
+                          ),
+                          onSaved: (userPassword) {
+                            _password = userPassword;
+                          },
                         ),
-                        onSaved: (userPassword) {
-                          _password = userPassword;
-                        },
-                      ),
-                      SizedBox(height: 8),
-                      SocialLogInButton(
-                        buttonText: _buttonText!,
-                        onPressed: () => _formSubmit(context),
-                        buttonColor: Theme.of(context).primaryColor,
-                        textColor: Theme.of(context).secondaryHeaderColor,
-                      ),
-                      SizedBox(height: 10),
-                      OutlinedButton(
-                        onPressed: () => _change(),
-                        child: Text(_linkText!),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        SocialLogInButton(
+                          buttonText: _buttonText!,
+                          onPressed: () => _formSubmit(context),
+                          buttonColor: Theme.of(context).primaryColor,
+                          textColor: Theme.of(context).secondaryHeaderColor,
+                        ),
+                        const SizedBox(height: 10),
+                        OutlinedButton(
+                          onPressed: () => _change(),
+                          child: Text(_linkText!),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

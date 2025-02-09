@@ -47,13 +47,18 @@ class _ChatsPageState extends State<ChatsPage> {
                                 conversationUser: UserModel.idAndPhoto(
                                     userID: currentSpeech.listener!,
                                     profileURL:
-                                        currentSpeech.listenerUserProfileURL)),
+                                        currentSpeech.listenerUserProfileURL,
+                                    userName: currentSpeech.listenerUserName)),
                             child: ChatPage(),
                           ),
                         ));
                       },
                       child: ListTile(
-                        title: Text(currentSpeech.listenerUserName!),
+                        title: Text(
+                          currentSpeech.listenerUserName!,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
                         subtitle: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -68,6 +73,7 @@ class _ChatsPageState extends State<ChatsPage> {
                           ],
                         ),
                         leading: CircleAvatar(
+                          radius: 25,
                           backgroundImage: NetworkImage(
                               currentSpeech.listenerUserProfileURL!),
                         ),

@@ -36,7 +36,7 @@ class UserModel {
     updatedAt = (map['updatedAt'] as Timestamp).toDate(),
     level = map['level'];
 
-  UserModel.idAndPhoto({required this.userID, required this.profileURL});
+  UserModel.idAndPhoto({required this.userID, required this.profileURL, required this.userName});
 
     @override
   String toString() {

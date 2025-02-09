@@ -105,7 +105,9 @@ class _UsersPageState extends State<UsersPage> {
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider<ChatViewModel>(
-              create: (context) => ChatViewModel(currentUser: _userViewModel.user!, conversationUser: _currentUser),
+              create: (context) => ChatViewModel(
+                  currentUser: _userViewModel.user!,
+                  conversationUser: _currentUser),
               child: ChatPage(),
             ),
           ),
@@ -113,9 +115,16 @@ class _UsersPageState extends State<UsersPage> {
       },
       child: Card(
         child: ListTile(
-          title: Text(_currentUser.userName!),
+          title: Text(
+            _currentUser.userName!,
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           subtitle: Text(_currentUser.email!),
           leading: CircleAvatar(
+            radius: 30,
             backgroundColor: Colors.grey.withAlpha(40),
             backgroundImage: NetworkImage(_currentUser.profileURL!),
           ),
@@ -125,7 +134,7 @@ class _UsersPageState extends State<UsersPage> {
   }
 
   _loadingNewElementsIndicator() {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.all(8.0),
       child: Center(
         child: CircularProgressIndicator(),

@@ -28,7 +28,9 @@ class _ChatPageState extends State<ChatPage> {
     final _chatViewModel = Provider.of<ChatViewModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat'),
+        title: _chatViewModel.conversationUser.userName != null
+            ? Text(_chatViewModel.conversationUser.userName!)
+            : const Text('Chat'),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Theme.of(context).secondaryHeaderColor,
       ),
